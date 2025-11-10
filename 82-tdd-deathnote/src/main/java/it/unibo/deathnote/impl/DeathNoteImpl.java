@@ -33,7 +33,7 @@ public class DeathNoteImpl implements DeathNote{
 
     @Override
     public boolean writeDeathCause(String cause) {
-        if (book.get(currentName).size() > 0){
+        if (book.get(currentName).size() > 0 || currentName == null){
             throw new IllegalStateException("Put a new name before writing the death cause");
         }
         book.get(currentName).add(cause);
@@ -60,7 +60,7 @@ public class DeathNoteImpl implements DeathNote{
 
     @Override
     public boolean writeDetails(String details) {
-        if (book.get(currentName).size() > 1){
+        if (book.get(currentName).size() > 1 || currentName == null){
             throw new IllegalStateException("write a death cause before writing the details");
         }
         long time = System.currentTimeMillis();

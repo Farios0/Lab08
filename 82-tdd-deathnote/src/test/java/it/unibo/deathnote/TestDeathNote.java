@@ -54,6 +54,13 @@ class TestDeathNote {
         assertFalse(libro.containsName("alfredo"));
         libro.writeName("alfredo");
         assertTrue(libro.containsName("alfredo"));
+        assertFalse(libro.containsName("armando"));
+        assertFalse(libro.containsName(""));
+    }
+
+    @Test
+    public void TestWriteCause(){
+        
     }
 
 }
