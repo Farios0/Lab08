@@ -77,5 +77,9 @@ public class DeathNoteImpl implements DeathNote{
     public boolean isNameWritten(String name) {
         return book.keySet().contains(name);
     }
+
+    public boolean containsName(String name){
+        return book.keySet().contains(name);
+    }
     
 }
