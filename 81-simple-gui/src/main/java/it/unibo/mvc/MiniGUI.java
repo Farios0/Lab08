@@ -1,10 +1,12 @@
 package it.unibo.mvc;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.TextField;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,20 +32,30 @@ public class MiniGUI {
      */
     public MiniGUI() {
         final JPanel canvas = new JPanel();
+        final JPanel pane = new JPanel();
         canvas.setLayout(new BorderLayout());
+        pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS)); 
+        final TextField result = new TextField(); 
         final JButton write = new JButton("Print a random number on standard output");
-        canvas.add(write, BorderLayout.CENTER);
+        pane.add(write);
+        canvas.add(pane, BorderLayout.CENTER);
+        canvas.add(result, BorderLayout.NORTH);
         frame.setContentPane(canvas);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /*
          * Handlers
          */
-        write.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                System.out.println(randomGenerator.nextInt());
+        write.addActionListener(
+            new ActionListener() {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    final var random = randomGenerator.nextInt();
+                    System.out.println(random); //NOPMD
+                    //this println is not for debugging, it is necessary to make the GUI work.
+                    result.setText(Integer.toString(random));
+                }
             }
-        });
+        );
     }
 
     private void display() {
