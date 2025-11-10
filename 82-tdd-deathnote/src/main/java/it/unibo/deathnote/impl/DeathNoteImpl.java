@@ -8,7 +8,8 @@ import java.util.Objects;
 import it.unibo.deathnote.api.DeathNote;
 
 public class DeathNoteImpl implements DeathNote{
-    private String currentname;
+    private String currentName;
+    private long timeKeeper;
     private Map<String, List<String>> book = new HashMap<>();
 
     @Override
@@ -22,43 +23,54 @@ public class DeathNoteImpl implements DeathNote{
     @Override
     public void writeName(String name) {
         Objects.requireNonNull(name);
-        currentname = name;
+        currentName = name;
         if (book.keySet().contains(name)){
             throw new IllegalArgumentException("the name is already on the DeathNote");
         }
         book.keySet().add(name);
+        book.get(currentName).add("Heart Attack");
     }
 
     @Override
     public boolean writeDeathCause(String cause) {
-        if (book.get(currentname).size() > 0){
+        if (book.get(currentName).size() > 0){
             throw new IllegalStateException("Put a new name before writing the death cause");
         }
-        long time = System.currentTimeMillis();
-        book.get(currentname).add(cause);
+        book.get(currentName).add(cause);
         long time2 = System.currentTimeMillis();
-        if(time2 - time <= 40) {
+        if(time2 - timeKeeper <= 40) {
             return true;
         } else {
-            book.get(currentname).remove(cause);
-            book.get(currentname).add("Heart Attack");
+            book.get(currentName).remove(cause);
+            book.get(currentName).add("Heart Attack");
             return false;
         }
     }
 
+    public void writeName(String name, String cause) {
+        Objects.requireNonNull(name);
+        currentName = name;
+        if (book.keySet().contains(name)){
+            throw new IllegalArgumentException("the name is already on the DeathNote");
+        }
+        book.keySet().add(name);
+        timeKeeper = System.currentTimeMillis();
+        writeDeathCause(cause);
+    }
+
     @Override
     public boolean writeDetails(String details) {
-        if (book.get(currentname).size() > 1){
+        if (book.get(currentName).size() > 1){
             throw new IllegalStateException("write a death cause before writing the details");
         }
         long time = System.currentTimeMillis();
-        book.get(currentname).add(details);
+        book.get(currentName).add(details);
         long time2 = System.currentTimeMillis();
         if(time2 - time <= 384000) {
             return true;
         } else {
-            book.get(currentname).remove(details);
-            book.get(currentname).add("No details provided");
+            book.get(currentName).remove(details);
+            book.get(currentName).add("No details provided");
             return false;
         }
     }
