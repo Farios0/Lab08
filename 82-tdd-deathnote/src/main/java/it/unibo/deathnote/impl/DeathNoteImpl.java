@@ -1,6 +1,4 @@
 package it.unibo.deathnote.impl;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,8 +48,8 @@ public class DeathNoteImpl implements DeathNote{
 
     @Override
     public boolean writeDetails(String details) {
-        if (book.get(currentname).size() > 0){
-            throw new IllegalStateException("Put a new name before writing the details");
+        if (book.get(currentname).size() > 1){
+            throw new IllegalStateException("write a death cause before writing the details");
         }
         long time = System.currentTimeMillis();
         book.get(currentname).add(details);
