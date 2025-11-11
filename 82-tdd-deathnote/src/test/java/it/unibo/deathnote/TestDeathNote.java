@@ -1,4 +1,5 @@
 package it.unibo.deathnote;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,12 +18,12 @@ class TestDeathNote {
 
     private void testRulesExceptions(int ruleNumber){
         assertThrows(IllegalArgumentException.class, 
-        new Executable(){
-            @Override
-            public void execute() throws Throwable{
-                libro.getRule(ruleNumber);
+            new Executable(){
+                @Override
+                public void execute() throws Throwable{
+                    libro.getRule(ruleNumber);
+                }
             }
-        }
         );
     }
 
@@ -59,8 +60,43 @@ class TestDeathNote {
     }
 
     @Test
-    public void TestWriteCause(){
-        
+    public void TestWriteCause() throws InterruptedException{
+        assertThrows(IllegalStateException.class, 
+            new Executable(){
+                @Override
+                public void execute(){
+                    libro.writeDeathCause("fell from the stairs");
+                }
+            }
+        );
+        libro.writeName("armando");
+        assertEquals(libro.getDeathCause("armando"),"Heart Attack");
+        assertTrue(libro.writeName("giuseppe", "karting accident"));
+        assertEquals("karting accident", libro.getDeathCause("giuseppe"));
+        Thread.sleep(100);
+        libro.writeDeathCause("fell from the stairs");
+        assertEquals(libro.getDeathCause("giuseppe"), "karting accident");
+
+    }
+
+    @Test
+    public void TestWriteDetails() throws InterruptedException {
+        assertThrows(IllegalStateException.class, 
+            new Executable(){
+                @Override
+                public void execute(){
+                    libro.writeDetails("fell from the stairs");
+                }
+            }
+        );
+        libro.writeName("caio");
+        assertEquals("", libro.getDeathDetails("caio"));
+        assertTrue(libro.writeDetails("run for too long"));
+        assertEquals("run for too long", libro.getDeathDetails("caio"));
+        libro.writeName("tolomeo");
+        Thread.sleep(6100);
+        libro.writeDetails("fell from the stairs");        
+        assertEquals("", libro.getDeathDetails("tolomeo"));
     }
 
 }
