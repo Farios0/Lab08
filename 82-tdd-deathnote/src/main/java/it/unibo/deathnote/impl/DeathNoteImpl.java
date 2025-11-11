@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-//import javafx.util.Pair;
 import java.util.Objects;
 
 import it.unibo.deathnote.api.DeathNote;
