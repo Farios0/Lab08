@@ -140,4 +140,6 @@ public interface DeathNote {
     boolean isNameWritten(String name);
 
     public boolean containsName(String name);
+
+    boolean writeName(String name, String cause);
 }

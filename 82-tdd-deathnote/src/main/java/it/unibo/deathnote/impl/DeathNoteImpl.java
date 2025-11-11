@@ -1,4 +1,5 @@
 package it.unibo.deathnote.impl;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class DeathNoteImpl implements DeathNote{
         if (ruleNumber <= 0 || ruleNumber > RULES.size()) {
             throw new IllegalArgumentException("Invalid ruleNumber");
         }
-        return RULES.get(ruleNumber);
+        return RULES.get(ruleNumber - 1);
     }
 
     @Override
@@ -27,50 +28,45 @@ public class DeathNoteImpl implements DeathNote{
         if (book.keySet().contains(name)){
             throw new IllegalArgumentException("the name is already on the DeathNote");
         }
-        book.keySet().add(name);
-        book.get(currentName).add("Heart Attack");
+        book.put(name, new ArrayList<>());
+        book.get(currentName).addAll(List.of("Heart Attack", ""));
+        timeKeeper = System.currentTimeMillis();
     }
 
     @Override
     public boolean writeDeathCause(String cause) {
-        if (book.get(currentName).size() > 0 || currentName == null){
+        if (book.get(currentName) == null || currentName == null){
             throw new IllegalStateException("Put a new name before writing the death cause");
         }
-        book.get(currentName).add(cause);
+        book.get(currentName).addFirst(cause);
         long time2 = System.currentTimeMillis();
         if(time2 - timeKeeper <= 40) {
+            book.get(currentName).remove("Heart Attack");
             return true;
         } else {
             book.get(currentName).remove(cause);
-            book.get(currentName).add("Heart Attack");
             return false;
         }
     }
 
-    public void writeName(String name, String cause) {
-        Objects.requireNonNull(name);
-        currentName = name;
-        if (book.keySet().contains(name)){
-            throw new IllegalArgumentException("the name is already on the DeathNote");
-        }
-        book.keySet().add(name);
-        timeKeeper = System.currentTimeMillis();
-        writeDeathCause(cause);
+    @Override
+    public boolean writeName(String name, String cause) {
+        writeName(name);
+        return writeDeathCause(cause);
     }
 
     @Override
     public boolean writeDetails(String details) {
-        if (book.get(currentName).size() > 1 || currentName == null){
+        if (book.get(currentName) == null || currentName == null){
             throw new IllegalStateException("write a death cause before writing the details");
         }
-        long time = System.currentTimeMillis();
         book.get(currentName).add(details);
         long time2 = System.currentTimeMillis();
-        if(time2 - time <= 384000) {
+        if(time2 - timeKeeper <= 6040) {
+            book.get(currentName).remove("");
             return true;
         } else {
             book.get(currentName).remove(details);
-            book.get(currentName).add("No details provided");
             return false;
         }
     }
@@ -90,6 +86,7 @@ public class DeathNoteImpl implements DeathNote{
         return book.keySet().contains(name);
     }
 
+    @Override
     public boolean containsName(String name){
         return book.keySet().contains(name);
     }
