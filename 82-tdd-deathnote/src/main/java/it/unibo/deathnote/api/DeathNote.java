@@ -90,6 +90,13 @@ public interface DeathNote {
     void writeName(String name);
 
     /**
+     * @param name the name of the person
+     * @param cause the cause of death
+     * @return true only if the cause is written in less than 40 milliseconds
+     */
+    boolean writeName(String name, String cause);
+
+    /**
      * If the cause of death is written within the next 40 milliseconds of writing the person's
      * name, it will happen.
      *
@@ -139,7 +146,9 @@ public interface DeathNote {
      */
     boolean isNameWritten(String name);
 
-    public boolean containsName(String name);
-
-    boolean writeName(String name, String cause);
+    /**
+     * @param name the name of the person
+     * @return true only if the person is already written on the Death Note
+     */
+    boolean containsName(String name);
 }
