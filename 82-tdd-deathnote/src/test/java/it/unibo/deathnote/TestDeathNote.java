@@ -14,7 +14,7 @@ import it.unibo.deathnote.impl.DeathNoteImpl;
 class TestDeathNote {
 
     public static final int NUMBER_OF_RULES = 13;
-    private DeathNote libro = new DeathNoteImpl();
+    private final DeathNote libro = new DeathNoteImpl();
 
     private void testRulesExceptions(final int ruleNumber) {
         assertThrows(IllegalArgumentException.class, 
@@ -37,10 +37,13 @@ class TestDeathNote {
     }
 
     @Test
-    private void testGetRules() {
+    void testGetRules() {
+        //CHECKSTYLE: MagicNumber OFF
+        //these are real test cases that a user could encounter
         testRulesExceptions(0);
         testRulesExceptions(-8);
         testRulesExceptions(1880);
+        //CHECKSTYLE: MagicNumber ON
         assertNotEquals(null, catchRulesExceptionMessage(0));
         assertNotEquals("", catchRulesExceptionMessage(0));
         assertNotEquals(" ", catchRulesExceptionMessage(0));
@@ -51,7 +54,7 @@ class TestDeathNote {
     }
 
     @Test
-    private void testWriteName() {
+    void testWriteName() {
         final String casualPerson = "alfredo";
         assertFalse(libro.containsName(casualPerson));
         libro.writeName(casualPerson);
@@ -61,7 +64,7 @@ class TestDeathNote {
     }
 
     @Test
-    private void testWriteCause() throws InterruptedException {
+    void testWriteCause() throws InterruptedException {
         assertThrows(IllegalStateException.class, 
             new Executable() {
                 @Override
@@ -70,18 +73,21 @@ class TestDeathNote {
                 }
             }
         );
-        libro.writeName("armando");
-        assertEquals(libro.getDeathCause("armando"), "Heart Attack");
-        assertTrue(libro.writeName("giuseppe", "karting accident"));
-        assertEquals("karting accident", libro.getDeathCause("giuseppe"));
+        final String person1 = "armando";
+        final String person2 = "giuseppe";
+        final String cause = "karting accident";
+        libro.writeName(person1);
+        assertEquals(libro.getDeathCause(person1), "Heart Attack");
+        assertTrue(libro.writeName(person2, cause));
+        assertEquals(cause, libro.getDeathCause(person2));
         Thread.sleep(100);
         libro.writeDeathCause("fell from the stairs");
-        assertEquals(libro.getDeathCause("giuseppe"), "karting accident");
+        assertEquals(libro.getDeathCause(person2), cause);
 
     }
 
     @Test
-    private void testWriteDetails() throws InterruptedException {
+    void testWriteDetails() throws InterruptedException {
         assertThrows(IllegalStateException.class, 
             new Executable() {
                 @Override
@@ -90,12 +96,14 @@ class TestDeathNote {
                 }
             }
         );
-        libro.writeName("caio");
-        assertEquals("", libro.getDeathDetails("caio"));
+        final String person = "caio";
+        libro.writeName(person);
+        assertEquals("", libro.getDeathDetails(person));
         assertTrue(libro.writeDetails("run for too long"));
-        assertEquals("run for too long", libro.getDeathDetails("caio"));
+        assertEquals("run for too long", libro.getDeathDetails(person));
         libro.writeName("tolomeo");
-        Thread.sleep(6100);
+        final long timeToSleep = 6100;
+        Thread.sleep(timeToSleep);
         libro.writeDetails("drowned");
         assertEquals("", libro.getDeathDetails("tolomeo"));
     }
