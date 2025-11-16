@@ -15,7 +15,7 @@ import java.util.Objects;
 public final class DrawNumberControllerImpl implements DrawNumberController {
 
     private final DrawNumber model;
-    private List<DrawNumberView> views = new ArrayList<>();
+    private final List<DrawNumberView> views = new ArrayList<>();
 
     /**
      * Builds a new game controller provided a game model.
@@ -36,7 +36,7 @@ public final class DrawNumberControllerImpl implements DrawNumberController {
 
     @Override
     public void newAttempt(final int n) {
-        for (var view : views) {
+        for (final var view : views) {
             Objects.requireNonNull(view, "There is no view attached!").result(model.attempt(n));
         }
     }

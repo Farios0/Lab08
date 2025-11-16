@@ -17,6 +17,7 @@ public final class LaunchApp {
 
     private static final String SWING_VIEW = "it.unibo.mvc.view.DrawNumberSwingView";
     private static final String STDOUT_VIEW = "it.unibo.mvc.view.DrawNumberStandardOutputView";
+    private static final int CYCLES = 3;
 
     private LaunchApp() { }
 
@@ -31,21 +32,20 @@ public final class LaunchApp {
      * @throws IllegalAccessException in case of reflection issues
      * @throws IllegalArgumentException in case of reflection issues
      */
-    public static void main(final String... args) throws Exception{
+    public static void main(final String... args) throws Exception {
         final var model = new DrawNumberImpl();
         final DrawNumberController app = new DrawNumberControllerImpl(model);
-        Class<?> swingView = Class.forName(SWING_VIEW);
-        Class<?> stdOutView = Class.forName(STDOUT_VIEW);
-        List<Constructor<?>> costruttori = new ArrayList<>();
+        final Class<?> swingView = Class.forName(SWING_VIEW);
+        final Class<?> stdOutView = Class.forName(STDOUT_VIEW);
+        final List<Constructor<?>> costruttori = new ArrayList<>();
         costruttori.add(swingView.getConstructor());
         costruttori.add(stdOutView.getConstructor());
-        for (int i = 0; i < 30; i++) {
-            for (var c : costruttori) {
+        for (int i = 0; i < CYCLES; i++) {
+            for (final var c : costruttori) {
                 final DrawNumberView view = (DrawNumberView) c.newInstance();
                 app.addView(view);
                 }
         }
-
 
     }
 }

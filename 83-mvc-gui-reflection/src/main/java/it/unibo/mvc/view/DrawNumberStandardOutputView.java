@@ -22,11 +22,13 @@ public final class DrawNumberStandardOutputView implements DrawNumberView {
     public DrawNumberStandardOutputView(final DrawNumberController controller) {
         setController(controller);
     }
+
     /**
      * Constructor to use in reflection.
      */
 
     public DrawNumberStandardOutputView() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     @Override
