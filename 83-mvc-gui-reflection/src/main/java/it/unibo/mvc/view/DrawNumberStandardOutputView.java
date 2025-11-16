@@ -22,6 +22,12 @@ public final class DrawNumberStandardOutputView implements DrawNumberView {
     public DrawNumberStandardOutputView(final DrawNumberController controller) {
         setController(controller);
     }
+    /**
+     * Constructor to use in reflection.
+     */
+
+    public DrawNumberStandardOutputView() {
+    }
 
     @Override
     public void setController(final DrawNumberController observer) {

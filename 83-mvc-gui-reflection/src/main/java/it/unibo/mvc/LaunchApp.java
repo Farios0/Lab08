@@ -1,15 +1,22 @@
 package it.unibo.mvc;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
 import it.unibo.mvc.api.DrawNumberController;
+import it.unibo.mvc.api.DrawNumberView;
 import it.unibo.mvc.controller.DrawNumberControllerImpl;
 import it.unibo.mvc.model.DrawNumberImpl;
-import it.unibo.mvc.view.DrawNumberStandardOutputView;
-//import it.unibo.mvc.view.DrawNumberSwingView;
 
 /**
  * Application entry-point.
  */
 public final class LaunchApp {
+
+    private static final String SWING_VIEW = "it.unibo.mvc.view.DrawNumberSwingView";
+    private static final String STDOUT_VIEW = "it.unibo.mvc.view.DrawNumberStandardOutputView";
 
     private LaunchApp() { }
 
@@ -24,9 +31,21 @@ public final class LaunchApp {
      * @throws IllegalAccessException in case of reflection issues
      * @throws IllegalArgumentException in case of reflection issues
      */
-    public static void main(final String... args) {
+    public static void main(final String... args) throws Exception{
         final var model = new DrawNumberImpl();
         final DrawNumberController app = new DrawNumberControllerImpl(model);
-        app.addView(new DrawNumberStandardOutputView(app));
+        Class<?> swingView = Class.forName(SWING_VIEW);
+        Class<?> stdOutView = Class.forName(STDOUT_VIEW);
+        List<Constructor<?>> costruttori = new ArrayList<>();
+        costruttori.add(swingView.getConstructor());
+        costruttori.add(stdOutView.getConstructor());
+        for (int i = 0; i < 30; i++) {
+            for (var c : costruttori) {
+                final DrawNumberView view = (DrawNumberView) c.newInstance();
+                app.addView(view);
+                }
+        }
+
+
     }
 }
