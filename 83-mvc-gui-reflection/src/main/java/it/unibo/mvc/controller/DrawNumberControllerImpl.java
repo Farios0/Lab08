@@ -25,12 +25,12 @@ public final class DrawNumberControllerImpl implements DrawNumberController {
     }
 
     @Override
-    public void addView(final DrawNumberView view) {
-        Objects.requireNonNull(view, "Cannot set a null view");
+    public void addView(final DrawNumberView newView) {
+        Objects.requireNonNull(newView, "Cannot set a null view");
         if (this.view != null) {
             throw new IllegalStateException("The view is already set! Multiple views are not supported");
         }
-        this.view = view;
+        this.view = newView;
         view.setController(this);
         view.start();
     }

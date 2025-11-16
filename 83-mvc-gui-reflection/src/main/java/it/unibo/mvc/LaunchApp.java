@@ -27,6 +27,6 @@ public final class LaunchApp {
     public static void main(final String... args) {
         final var model = new DrawNumberImpl();
         final DrawNumberController app = new DrawNumberControllerImpl(model);
-        app.addView(new DrawNumberStandardOutputView());
+        app.addView(new DrawNumberStandardOutputView(app));
     }
 }
